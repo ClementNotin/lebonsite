@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+    {% block head %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <title>{% block title %}{% endblock %} - LebonSite</title>
+    {% endblock %}
+</head>
+<body>
+<div id="menu"><a href="{{ url_for("apparts") }}">Voir les appart</a></div>
+<div id="content">{% block content %}{% endblock %}</div>
+<footer>
+    {% block footer %}
+        &copy; Copyright 2013 by Moi.
+    {% endblock %}
+</footer>
+</body>

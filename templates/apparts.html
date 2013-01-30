@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}Voir un appart{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+
+    {% for appart in apparts %}
+   <p>
+    <h1>{{ appart.titre }}</h1>
+       {{ appart.description|safe }}
+        </p>
+    {% endfor %}
+{% endblock %}
