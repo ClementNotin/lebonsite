@@ -1,14 +1,31 @@
 {% extends "layout.html" %}
-{% block title %}Voir un appart{% endblock %}
+{% block title %}Tous les apparts{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
 {% block content %}
 
     {% for appart in apparts %}
-   <p>
-    <h1>{{ appart.titre }}</h1>
-       {{ appart.description|safe }}
-        </p>
+        <div>
+            {% if appart.photos[0] is defined %}
+                <a href="{{ url_for("appart", appart_id=appart.id) }}">
+                    <img style="float:left; padding-right:2em; max-height: 10em; width:auto;"
+                         src="http://localhost:5001/photos/{{ appart.photos[0].file }}"/>
+                </a>
+            {% endif %}
+
+            <div style="float:left">
+                <p>
+                    <span><a href="{{ url_for("appart", appart_id=appart.id) }}">{{ appart.titre }}</a></span><br/>
+                    <strong>{{ appart.loyer }} €</strong><br/>
+                    Surface: {{ appart.surface }} m<sup>2</sup><br/>
+                    Pièces: {{ appart.pieces }}<br/>
+                    CP: {{ appart.cp }}<br/>
+                    {{ appart.date }}
+                </p>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <hr/>
     {% endfor %}
 {% endblock %}

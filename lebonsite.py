@@ -1,5 +1,8 @@
+# coding=utf-8
+
 from flask import Flask, render_template, request
 from database import session
+from sqlalchemy import func
 
 import sys
 
@@ -7,11 +10,6 @@ sys.path.append("/home/clem/PycharmProjects/lebonscrap")
 from Entities import Appartement, Photo
 
 app = Flask(__name__)
-
-@app.teardown_request
-def shutdown_session(exception=None):
-    session.remove()
-
 
 @app.route('/')
 def hello_world():
@@ -23,9 +21,15 @@ def apparts():
     try:
         page = int(request.args.get('page', 1))
     except ValueError:
-        page=1
+        page = 1
 
-    apparts = session.query(Appartement).order_by("date").slice(0,34)
+    #return 35 appart, du plus récent
+    apparts = session.query(Appartement).order_by(Appartement.date.desc()).slice(35*(page-1), 35+35*(page-1))
+
+    count = session.query(func.count(Appartement.id)).scalar()
+    print count
+    # TODO: pagnination
+
     return render_template('apparts.html', apparts=apparts)
 
 
@@ -37,6 +41,12 @@ def appart(appart_id=None):
     else:
         return apparts()
 
+
+################################### PLOMBERIE ######################################
+
+@app.teardown_request
+def shutdown_session(exception=None):
+    session.remove()
 
 if __name__ == '__main__':
     app.run(debug=True)
