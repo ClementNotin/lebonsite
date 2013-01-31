@@ -1,11 +1,11 @@
 # coding=utf-8
 
 from flask import Flask, render_template, request
-from database import session
+from database import session, DataTablesServer
 from sqlalchemy import func
+import json
 
 import sys
-
 sys.path.append("/home/clem/PycharmProjects/lebonscrap")
 from Entities import Appartement, Photo
 
@@ -15,6 +15,11 @@ app = Flask(__name__)
 def hello_world():
     return 'Blah blah World!'
 
+@app.route("/api/apparts/")
+def api_apparts():
+    datatable = DataTablesServer(request, ["titre", "loyer", "date", "photos"], Appartement)
+    results = datatable.output_result()
+    return json.dumps(results)
 
 @app.route("/apparts/")
 def apparts():
