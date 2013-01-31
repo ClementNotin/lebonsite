@@ -13,14 +13,15 @@
                 "bServerSide":true,
                 "sPaginationType":"full_numbers",
                 "bjQueryUI":true,
-                "sAjaxSource":"/api/apparts/"
+                "sAjaxSource":"/api/apparts/",
+                "aaSorting": [[2,'desc']]
             });
         });
     </script>
 {% endblock %}
 {% block content %}
 
-    <table id="tblApparts" cellpadding="0" cellspacing="0" border="0">
+    <table id="tblApparts">
         <thead>
         <tr>
             <th>Titre</th>
