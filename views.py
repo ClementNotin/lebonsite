@@ -1,20 +1,40 @@
-from sqlalchemy import create_engine, func, desc, asc, or_
-from sqlalchemy.orm import scoped_session, sessionmaker
-from flask import url_for
+# coding=utf-8
 
-engine = create_engine('mysql+mysqldb://root@localhost/lebonscrap?use_unicode=1', convert_unicode=True, echo=True)
-session = scoped_session(sessionmaker(autocommit=False,
-    autoflush=False,
-    bind=engine))
+from flask import  render_template, request, url_for
+from sqlalchemy import asc, desc, func, or_
+import json
+from lebonsite import app,db
 
-# import all modules here that might define models so that
-# they will be registered properly on the metadata.  Otherwise
-# you will have to import them first before calling init_db()
 import sys
-
-sys.path.append('../lebonscrap/')
+sys.path.append("/home/clem/PycharmProjects/lebonscrap")
 from Entities import Appartement, Photo
-#Base.metadata.create_all(bind=engine)
+
+
+
+@app.route('/')
+def hello_world():
+    return 'Blah blah World!'
+
+
+@app.route("/api/apparts/")
+def api_apparts():
+    datatable = DataTablesServer(request, ["titre", "loyer", "date", "photos"], Appartement)
+    results = datatable.output_result()
+    return json.dumps(results)
+
+
+@app.route("/apparts/")
+def apparts():
+    return render_template('apparts.html', apparts=apparts)
+
+
+@app.route("/appart/<appart_id>")
+def appart(appart_id=None):
+    if appart_id:
+        appart = db.session.query(Appartement).filter_by(id=appart_id).first()
+        return render_template('appart.html', appart=appart)
+    else:
+        return apparts()
 
 
 class DataTablesServer:
@@ -70,7 +90,7 @@ class DataTablesServer:
 
 
     def run_queries(self):
-        query = session.query(self.collection)
+        query = db.session.query(self.collection)
 
         query = self.sorting(query)
 
@@ -82,8 +102,8 @@ class DataTablesServer:
         # get result from db
         self.result_data = query.all()
 
-        self.cardinality_filtered = self.filtering(session.query(func.count(self.collection.id))).scalar()
-        self.cardinality = session.query(func.count(self.collection.id)).scalar()
+        self.cardinality_filtered = self.filtering(db.session.query(func.count(self.collection.id))).scalar()
+        self.cardinality = db.session.query(func.count(self.collection.id)).scalar()
 
 
     def filtering(self, query):
@@ -115,3 +135,4 @@ class DataTablesServer:
 
             query = query.slice(start, start + length)
         return query
+
