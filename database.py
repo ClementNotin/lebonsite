@@ -25,9 +25,6 @@ class DataTablesServer:
         # values specified by the datatable for filtering, sorting, paging
         self.request_values = request.values
 
-        # connection to bdd
-        self.session = session
-
         # results from the db
         self.result_data = None
 
@@ -65,9 +62,6 @@ class DataTablesServer:
 
                 aaData_row.append(col)
 
-            # add additional rows here that are not represented in the database
-            # aaData_row.append(('''<input id='%s' type='checkbox'></input>''' % (str(row[ self.index ]))).replace('\\', ''))
-
             aaData_rows.append(aaData_row)
 
         output['aaData'] = aaData_rows
@@ -76,26 +70,19 @@ class DataTablesServer:
 
 
     def run_queries(self):
-        query = self.session.query(self.collection)
+        query = session.query(self.collection)
 
-        # the document field you chose to sort
         query = self.sorting(query)
 
         # the term you entered into the datatable search
         query = self.filtering(query)
 
-        # pages has 'start' and 'length' attributes
         query = self.paging(query)
 
         # get result from db
         self.result_data = query.all()
-        #self.result_data = mydb[self.collection].find(spec=filter,
-        #    skip=pages.start,
-        #    limit=pages.length,
-        #    sort=sorting)
 
-        self.cardinality_filtered = session.query(func.count(self.collection.id)).scalar()
-
+        self.cardinality_filtered = self.filtering(session.query(func.count(self.collection.id))).scalar()
         self.cardinality = session.query(func.count(self.collection.id)).scalar()
 
 
@@ -118,12 +105,6 @@ class DataTablesServer:
                     direction = desc
 
                 query = query.order_by(direction(self.columns[int(self.request_values['iSortCol_' + str(i)])]))
-                #.order_by(desc("date"))
-
-
-
-                #order.append((self.columns[int(self.request_values['iSortCol_' + str(i)])],
-                #              order_dict[]))
         return query
 
 
