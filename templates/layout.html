@@ -8,7 +8,10 @@
     {% endblock %}
 </head>
 <body>
-<div id="menu"><a href="{{ url_for("apparts") }}">Voir les appart</a></div>
+{% if g.user is defined and g.user.is_authenticated() %}
+    <div id="menu">Hello {{ g.user.username }} <a href="{{ url_for("logout") }}">[logout]</a>. <a
+            href="{{ url_for("apparts") }}">Voir les appart</a></div>
+{% endif %}
 <div id="content">{% block content %}{% endblock %}</div>
 
 </body>

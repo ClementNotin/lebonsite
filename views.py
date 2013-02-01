@@ -1,19 +1,23 @@
 # coding=utf-8
 
-from flask import  render_template, request, url_for
+from flask import  render_template, request, url_for, g, redirect, session
 from sqlalchemy import asc, desc, func, or_
+from sqlalchemy.orm.exc import NoResultFound
+from forms import LoginForm
 import json
-from lebonsite import app,db
+from lebonsite import app, db
+from entities import *
+from flask.ext.login import login_user, logout_user
 
 import sys
+
 sys.path.append("/home/clem/PycharmProjects/lebonscrap")
 from Entities import Appartement, Photo
 
 
-
 @app.route('/')
-def hello_world():
-    return 'Blah blah World!'
+def index():
+    return render_template('index.html')
 
 
 @app.route("/api/apparts/")
@@ -35,6 +39,38 @@ def appart(appart_id=None):
         return render_template('appart.html', appart=appart)
     else:
         return apparts()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if g.user is not None and g.user.is_authenticated():
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = None
+        try:
+            user = User.query.filter(User.username == form.login.data).one()
+        except NoResultFound:
+            print "bad login"
+
+        if user and user.check_password(form.password.data):
+            session['remember_me'] = form.remember_me.data
+            login_user(user)
+            if "next" in request.values and request.values["next"] != "/":
+                return redirect(request.values["next"])
+            else:
+                return redirect(url_for("apparts"))
+
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    if g.user is not None and g.user.is_authenticated():
+        logout_user()
+        return redirect(url_for('index'))
+    else:
+        return redirect(url_for('index'))
 
 
 class DataTablesServer:
