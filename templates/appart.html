@@ -32,19 +32,22 @@
             src="{{ url_for("static", filename="images/leboncoin.png") }}"/></a>
     <br/>
     <hr/>
-    <ul>
+    <table>
         {% for view in appart.views %}
             {% if view.user == g.user %}
-                <li>J'ai noté :
-                    <span class="score" data-editable="true" data-rating="{{ view.note }}"></span>
-                </li>
+                <tr>
+                    <td style="text-align:right">J'ai noté :</td>
+                    <td><span class="score" data-editable="true" data-rating="{{ view.note }}"></span></td>
+                </tr>
+
             {% elif view.note > 0 %}
-                <li><em>{{ view.user.username }}</em> a noté :
-                    <span class="score" data-rating="{{ view.note }}"></span>
-                </li>
+                <tr>
+                    <td style="text-align:right"><em>{{ view.user.username }}</em> a noté :</td>
+                    <td><span class="score" data-rating="{{ view.note }}"></span></td>
+                </tr>
             {% endif %}
         {% endfor %}
-    </ul>
+    </table>
     <br/>
     <hr/>
     {% for comment in appart.comments %}
