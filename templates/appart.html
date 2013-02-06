@@ -1,5 +1,26 @@
 {% extends "layout.html" %}
 {% block title %}Voir un appart{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/jquery.raty.js") }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.score').raty({
+                path:"/static/images/",
+                score:function () {
+                    return $(this).attr('data-rating');
+                },
+                click:function (score, evt) {
+                    if ($(this).attr("data-editable") == "true") {
+                        $.post("/api/rate/" +{{ appart.id }}, {"note":score});
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
     <h1>{{ appart.titre }}</h1>
     {{ appart.description|safe }}
@@ -9,6 +30,21 @@
     <br/>
     <a href="http://www.leboncoin.fr/locations/{{ appart.id }}.htm"><img
             src="{{ url_for("static", filename="images/leboncoin.png") }}"/></a>
+    <br/>
+    <hr/>
+    <ul>
+        {% for view in appart.views %}
+            {% if view.user == g.user %}
+                <li>J'ai noté :
+                    <span class="score" data-editable="true" data-rating="{{ view.note }}"></span>
+                </li>
+            {% elif view.note > 0 %}
+                <li><em>{{ view.user.username }}</em> a noté :
+                    <span class="score" data-rating="{{ view.note }}"></span>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
     <br/>
     <hr/>
     {% for comment in appart.comments %}

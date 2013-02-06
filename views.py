@@ -21,6 +21,16 @@ def api_apparts():
     return json.dumps(results)
 
 
+@app.route("/api/rate/<appart_id>", methods=["POST"])
+def api_rate(appart_id=None):
+    if appart_id and "note" in request.values:
+        visit = AppartementUser.query.filter_by(user=g.user, appartement_id=appart_id).first()
+        visit.note = int(request.values["note"])
+        db.session.commit()
+
+    return "ok"
+
+
 @app.route("/apparts/")
 def apparts():
     return render_template('apparts.html')
