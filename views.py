@@ -36,6 +36,14 @@ def appart(appart_id=None):
         # get the appart
         appart = db.session.query(Appartement).filter_by(id=appart_id).first()
 
+        # has the user already seen this appart? if not: add tracking
+        last_visit = AppartementUser.query.filter_by(appartement=appart, user=g.user).first()
+        if not last_visit:
+            last_visit=AppartementUser(g.user, appart)
+            last_visit.date_seen=datetime.now()
+            db.session.add(last_visit)
+            db.session.commit()
+
         return render_template('appart.html', appart=appart, form=form)
     else:
         return apparts()

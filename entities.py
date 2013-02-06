@@ -19,6 +19,7 @@ class Appartement(db.Model):
     description = db.Column(db.String(5000))
     photos = db.relationship("Photo", order_by="Photo.id", backref="appartement")
     comments = db.relationship("Comment", order_by="Comment.id", backref="appartement")
+    views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="appartement")
     date = db.Column(db.DateTime)
     auteur = db.Column(db.String(100))
 
@@ -58,6 +59,7 @@ class Photo(db.Model):
     def __repr__(self):
         return "<Photo('%s')>" % self.file
 
+
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -65,6 +67,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     pwdhash = db.Column(db.String(40), unique=True)
     comments = db.relationship("Comment", order_by="Comment.id", backref="user")
+    views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="user")
 
     def __init__(self, username, pwdhash):
         self.username = username
@@ -109,3 +112,18 @@ class Comment(db.Model):
     def __repr__(self):
         return '<Comment %r>' % self.content
 
+
+class AppartementUser(db.Model):
+    __tablename__ = 'appartements_users'
+
+    appartement_id = db.Column(db.Integer, db.ForeignKey("appartements.id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    date_seen = db.Column(db.DateTime)
+    note = db.Column(db.SmallInteger, default=0)
+
+    def __init__(self, user, appartement):
+        self.user = user
+        self.appartement = appartement
+
+    def __repr__(self):
+        return '<AppartementUser %r,%r,%r,%r>' % (self.user, self.appartement, self.date_seen, self.note)
