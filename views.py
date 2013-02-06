@@ -23,7 +23,7 @@ def api_apparts():
 
 @app.route("/apparts/")
 def apparts():
-    return render_template('apparts.html', apparts=apparts)
+    return render_template('apparts.html')
 
 
 @app.route("/appart/<appart_id>")
