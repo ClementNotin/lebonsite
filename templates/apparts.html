@@ -2,27 +2,37 @@
 {% block title %}Tous les apparts{% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.css') }}"
+          xmlns="http://www.w3.org/1999/html">
 
     <script type="text/javascript" src="{{ url_for("static", filename="js/jquery.dataTables.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/jquery.dataTables.plugins.js") }}"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#tblApparts').dataTable({
+            var API_SOURCE = "/api/apparts/"
+
+            var datatable = $('#tblApparts').dataTable({
                 "bProcessing":true,
                 "bServerSide":true,
                 "sPaginationType":"full_numbers",
                 "bjQueryUI":true,
-                "sAjaxSource":"/api/apparts/",
-                "aaSorting": [[2,'desc']],
-                "sDom": 'ipfrtpl',
-                "bStateSave": true
+                "sAjaxSource":API_SOURCE + "?only_news=" + $("#only_news")[0].checked,
+                "aaSorting":[
+                    [2, 'desc']
+                ],
+                "sDom":'ipfrtpl',
+                "bStateSave":true
             });
+
+            $("#only_news").change(function () {
+                datatable.fnReloadAjax(API_SOURCE + "?only_news=" + this.checked);
+            })
         });
     </script>
 {% endblock %}
 {% block content %}
-
+    <p><label for="only_news">Ne voir que les nouveautés</label><input type="checkbox" id="only_news"/></p>
     <table id="tblApparts">
         <thead>
         <tr>

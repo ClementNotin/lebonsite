@@ -39,14 +39,15 @@ def appart(appart_id=None):
         # has the user already seen this appart? if not: add tracking
         last_visit = AppartementUser.query.filter_by(appartement=appart, user=g.user).first()
         if not last_visit:
-            last_visit=AppartementUser(g.user, appart)
-            last_visit.date_seen=datetime.now()
+            last_visit = AppartementUser(g.user, appart)
+            last_visit.date_seen = datetime.now()
             db.session.add(last_visit)
             db.session.commit()
 
         return render_template('appart.html', appart=appart, form=form)
     else:
         return apparts()
+
 
 @app.route("/comments/add", methods=["POST"])
 def comments_add():
@@ -102,6 +103,10 @@ class DataTablesServer:
         # values specified by the datatable for filtering, sorting, paging
         self.request_values = request.values
 
+        self.only_news = False
+        if "only_news" in self.request_values:
+            self.only_news = self.request_values["only_news"].lower() == "true"
+
         # results from the db
         self.result_data = None
 
@@ -151,7 +156,7 @@ class DataTablesServer:
 
         query = self.sorting(query)
 
-        # the term you entered into the datatable search
+        # the term you entered into the datatable search, and only new apparts (or not)
         query = self.filtering(query)
 
         query = self.paging(query)
@@ -169,6 +174,11 @@ class DataTablesServer:
 
             query = query.filter(
                 or_(Appartement.titre.like(search_string), Appartement.description.like(search_string)))
+
+        #show only news ?
+        if self.only_news:
+            query = query.outerjoin(AppartementUser, Appartement.id == AppartementUser.appartement_id).filter(
+                AppartementUser.user == None)
 
         return query
 
