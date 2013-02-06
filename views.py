@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 from flask import  render_template, request, url_for, g, redirect, session
 from sqlalchemy import asc, desc, func, or_
@@ -39,7 +39,6 @@ def appart(appart_id=None):
         return render_template('appart.html', appart=appart, form=form)
     else:
         return apparts()
-
 
 @app.route("/comments/add", methods=["POST"])
 def comments_add():

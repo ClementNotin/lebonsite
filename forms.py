@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 from flask.ext.wtf import Form, StringField, BooleanField, PasswordField, TextAreaField, HiddenField
 from flask.ext.wtf import Required
