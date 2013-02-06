@@ -6,6 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from forms import *
 import json
 from lebonsite import app, db
+import config
 from entities import *
 from flask.ext.login import login_user, logout_user
 
@@ -54,7 +55,7 @@ def appart(appart_id=None):
             db.session.add(last_visit)
             db.session.commit()
 
-        return render_template('appart.html', appart=appart, form=form)
+        return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart, form=form)
     else:
         return apparts()
 
@@ -143,8 +144,8 @@ class DataTablesServer:
                 if col_name == "photos":
                     if len(col) > 0:
                         col = u'<a href="%s">'\
-                              u'<img src="http://localhost:5001/photos/%s"/ style="max-height: 10em; width:auto;">'\
-                              u'</a>' % (url_for("appart", appart_id=row.id), col[0].file)
+                              u'<img src="%s/%s"/ style="max-height: 10em; width:auto;">'\
+                              u'</a>' % (url_for("appart", appart_id=row.id), config.BASE_PHOTOS_URL, col[0].file)
                     else:
                         col = ""
                 elif col_name == "titre":

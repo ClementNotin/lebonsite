@@ -25,7 +25,7 @@
     <h1>{{ appart.titre }}</h1>
     {{ appart.description|safe }}
     {% for photo in appart.photos %}
-        <img src="http://localhost:5001/photos/{{ photo.file }}"/>
+        <img src="{{ BASE_PHOTOS_URL }}{{ photo.file }}"/>
     {% endfor %}
     <br/>
     <a href="http://www.leboncoin.fr/locations/{{ appart.id }}.htm"><img
