@@ -3,17 +3,11 @@
 from flask import  render_template, request, url_for, g, redirect, session
 from sqlalchemy import asc, desc, func, or_
 from sqlalchemy.orm.exc import NoResultFound
-from forms import LoginForm
+from forms import *
 import json
 from lebonsite import app, db
 from entities import *
 from flask.ext.login import login_user, logout_user
-
-import sys
-
-sys.path.append("/home/clem/PycharmProjects/lebonscrap")
-from Entities import Appartement, Photo
-
 
 @app.route('/')
 def index():
@@ -35,10 +29,30 @@ def apparts():
 @app.route("/appart/<appart_id>")
 def appart(appart_id=None):
     if appart_id:
+        # add comment form
+        form = AddCommentForm()
+        form.appart_id.data = appart_id
+
+        # get the appart
         appart = db.session.query(Appartement).filter_by(id=appart_id).first()
-        return render_template('appart.html', appart=appart)
+
+        return render_template('appart.html', appart=appart, form=form)
     else:
         return apparts()
+
+
+@app.route("/comments/add", methods=["POST"])
+def comments_add():
+    form = AddCommentForm()
+    if form.validate_on_submit():
+        appart = db.session.query(Appartement).filter_by(id=form.appart_id.data).first()
+        if appart:
+            comment = Comment(form.content.data)
+            comment.user = g.user
+            comment.appartement = appart
+            db.session.add(comment)
+            db.session.commit()
+    return redirect(request.referrer)
 
 
 @app.route('/login', methods=['GET', 'POST'])

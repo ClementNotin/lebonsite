@@ -1,7 +1,62 @@
 # coding=utf-8
 
 from lebonsite import db, app
+from datetime import datetime
 from hashlib import sha1
+import time
+
+class Appartement(db.Model):
+    __tablename__ = 'appartements'
+
+    id = db.Column(db.Integer, primary_key=True)
+    titre = db.Column(db.String(100))
+    loyer = db.Column(db.Integer)
+    ville = db.Column(db.String(50))
+    cp = db.Column(db.Integer)
+    pieces = db.Column(db.Integer)
+    meuble = db.Column(db.Boolean)
+    surface = db.Column(db.Integer)
+    description = db.Column(db.String(5000))
+    photos = db.relationship("Photo", order_by="Photo.id", backref="appartement")
+    comments = db.relationship("Comment", order_by="Comment.id", backref="appartement")
+    date = db.Column(db.DateTime)
+    auteur = db.Column(db.String(100))
+
+    def __init__(self, id, titre, loyer, ville, cp, pieces, meuble, surface, description, photos, date, auteur):
+        self.id = id
+        self.titre = unicode(titre)
+        self.loyer = loyer
+        self.ville = unicode(ville)
+        self.cp = cp
+        self.pieces = pieces
+        self.meuble = meuble
+        self.surface = surface
+        self.description = unicode(description)
+
+        for photo in photos:
+            self.photos.append(Photo(photo))
+
+        self.date = datetime.fromtimestamp(
+            time.mktime(time.strptime("2013 " + date.encode("utf-8"), u"%Y le %d %B à %H:%M".encode("utf-8"))))
+        self.auteur = unicode(auteur)
+
+    def __repr__(self):
+        return u"<Appartement %r>" % self.titre
+
+
+class Photo(db.Model):
+    __tablename__ = 'photos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    file = db.Column(db.String(40), nullable=False)
+    appartement_id = db.Column(db.Integer, db.ForeignKey('appartements.id'))
+
+    def __init__(self, file):
+        self.file = file.split('/')[-1]
+
+
+    def __repr__(self):
+        return "<Photo('%s')>" % self.file
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -9,6 +64,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     pwdhash = db.Column(db.String(40), unique=True)
+    comments = db.relationship("Comment", order_by="Comment.id", backref="user")
 
     def __init__(self, username, pwdhash):
         self.username = username
@@ -35,4 +91,21 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime)
+    content = db.Column(db.String(5000))
+    appartement_id = db.Column(db.Integer, db.ForeignKey("appartements.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    def __init__(self, content, date=datetime.now()):
+        self.content = content
+        self.date = date
+
+    def __repr__(self):
+        return '<Comment %r>' % self.content
 
