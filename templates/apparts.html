@@ -10,7 +10,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            var API_SOURCE = "/api/apparts/"
+            var API_SOURCE = "{{ url_for("api_apparts") }}"
 
             var datatable = $('#tblApparts').dataTable({
                 "bProcessing":true,
