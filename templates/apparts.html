@@ -19,10 +19,10 @@
                 "bjQueryUI":true,
                 "sAjaxSource":API_SOURCE + "?only_news=" + $("#only_news")[0].checked,
                 "aaSorting":[
-                    [2, 'desc']
+                    [8, 'desc']
                 ],
                 "sDom":'ipfrtpl',
-                "bStateSave":true
+                "bStateSave":false
             });
 
             $("#only_news").change(function () {
@@ -37,9 +37,14 @@
         <thead>
         <tr>
             <th>Titre</th>
-            <th>Loyer</th>
-            <th>Date</th>
             <th>Photo</th>
+            <th>Loyer</th>
+            <th>Ville</th>
+            <th>CP</th>
+            <th>Pièces</th>
+            <th>Meublé</th>
+            <th>Surface</th>
+            <th>Date</th>
         </tr>
         </thead>
         <tfoot>

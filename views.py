@@ -17,7 +17,7 @@ def index():
 
 @app.route("/api/apparts/")
 def api_apparts():
-    datatable = DataTablesServer(request, ["titre", "loyer", "date", "photos"], Appartement)
+    datatable = DataTablesServer(request, ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date"], Appartement)
     results = datatable.output_result()
     return json.dumps(results)
 
