@@ -23,41 +23,47 @@
 
 {% block content %}
     <h1>{{ appart.titre }}</h1>
-    <div >
-        <table style="float:left; max-width:20%">
-            <tr>
-                <td>Loyer</td>
-                <td>{{ appart.loyer }} €</td>
-            </tr>
-            <tr>
-                <td>Ville</td>
-                <td>{{ appart.ville }}</td>
-            </tr>
-            <tr>
-                <td>CP</td>
-                <td>{{ appart.cp }}</td>
-            </tr>
-            <tr>
-                <td>Pièces</td>
-                <td>{{ appart.pieces }}</td>
-            </tr>
-            <tr>
-                <td style="padding-right:10px;">Meublé</td>
-                {% if appart.meuble %}
-                    <td>Oui</td>
-                {% else %}
-                    <td>Non</td>
-                {% endif %}
-            </tr>
-            <tr style="height:1em;vertical-align:bottom;">
-                <td>Surface</td>
-                <td>{{ appart.surface }} m<sup>2</sup></td>
-            </tr>
-            <tr>
-                <td>Date</td>
-                <td>{{ appart.date }}</td>
-            </tr>
-        </table>
+    <div>
+        <div style="float:left; max-width:20%">
+            <table>
+                <tr>
+                    <td>Loyer</td>
+                    <td>{{ appart.loyer }} €</td>
+                </tr>
+                <tr>
+                    <td>Ville</td>
+                    <td>{{ appart.ville }}</td>
+                </tr>
+                <tr>
+                    <td>CP</td>
+                    <td>{{ appart.cp }}</td>
+                </tr>
+                <tr>
+                    <td>Pièces</td>
+                    <td>{{ appart.pieces }}</td>
+                </tr>
+                <tr>
+                    <td style="padding-right:10px;">Meublé</td>
+                    {% if appart.meuble %}
+                        <td>Oui</td>
+                    {% else %}
+                        <td>Non</td>
+                    {% endif %}
+                </tr>
+                <tr style="height:1em;vertical-align:bottom;">
+                    <td>Surface</td>
+                    <td>{{ appart.surface }} m<sup>2</sup></td>
+                </tr>
+                <tr>
+                    <td>Date</td>
+                    <td>{{ appart.date }}</td>
+                </tr>
+            </table>
+            {% if arrondissement %}
+                <img src="{{ url_for("static",filename="images/arrdt_%s.gif" % arrondissement) }}"
+                     style="max-width: 50%"/>
+            {% endif %}
+        </div>
         <div style="float:right; padding-left:15px; border-left-style: solid; width:75%">
             {{ appart.description|safe }}
         </div>

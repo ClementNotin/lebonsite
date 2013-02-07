@@ -60,7 +60,13 @@ def appart(appart_id=None):
         for comment in appart.comments:
             comment.seen_by(g.user)
 
-        return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart, form=form)
+        #arrondissement depuis code postal
+        ardt=None
+        cp_str = str(appart.cp)
+        if cp_str.startswith("75"):
+            ardt=cp_str[-2:]
+
+        return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart, arrondissement=ardt, form=form)
     else:
         return apparts()
 
