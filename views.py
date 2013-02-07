@@ -189,7 +189,7 @@ class DataTablesServer:
         #show only news ?
         if self.only_news:
             query = query.outerjoin(AppartementUser, Appartement.id == AppartementUser.appartement_id).filter(
-                AppartementUser.user == None)
+                AppartementUser.user == None) # "== None" n'est pas une erreur, c'est sqlalchemy qui le veut comme ça
 
         return query
 
