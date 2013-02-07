@@ -49,12 +49,7 @@ def appart(appart_id=None):
         appart = db.session.query(Appartement).filter_by(id=appart_id).first()
 
         # has the user already seen this appart? if not: add tracking
-        last_visit = AppartementUser.query.filter_by(appartement=appart, user=g.user).first()
-        if not last_visit:
-            last_visit = AppartementUser(g.user, appart)
-            last_visit.date_seen = datetime.now()
-            db.session.add(last_visit)
-            db.session.commit()
+        appart.seen_by(g.user)
 
         # MAJ le fait que l'utilisateur a vu les commentaires
         for comment in appart.comments:

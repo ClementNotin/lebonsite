@@ -41,6 +41,14 @@ class Appartement(db.Model):
             time.mktime(time.strptime("2013 " + date.encode("utf-8"), u"%Y le %d %B à %H:%M".encode("utf-8"))))
         self.auteur = unicode(auteur)
 
+    def seen_by(self, user):
+        #may already be seen! si on insert quand même on aura un primary key duplication error
+        if not AppartementUser.query.get((self.id,user.id)):
+            last_visit = AppartementUser(user, self)
+            last_visit.date_seen = datetime.now()
+            db.session.add(last_visit)
+            db.session.commit()
+
     def __repr__(self):
         return u"<Appartement %d %r>" % (self.id,self.titre)
 
