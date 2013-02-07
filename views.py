@@ -61,12 +61,13 @@ def appart(appart_id=None):
             comment.seen_by(g.user)
 
         #arrondissement depuis code postal
-        ardt=None
+        ardt = None
         cp_str = str(appart.cp)
         if cp_str.startswith("75"):
-            ardt=cp_str[-2:]
+            ardt = cp_str[-2:]
 
-        return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart, arrondissement=ardt, form=form)
+        return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart,
+            arrondissement=ardt, form=form)
     else:
         return apparts()
 
@@ -82,13 +83,16 @@ def comments_add():
             comment.appartement = appart
             db.session.add(comment)
             db.session.commit()
-    return redirect(request.referrer)
+
+    #fait scroller en bas de page pour voir si ya pas eu des nouveaux commentaires pendant l'écriture de celui-ci
+    return redirect(request.referrer + "#commentForm")
 
 
 @app.route("/notifications")
 def notifications():
     comments = Comment.query.outerjoin(CommentUser, Comment.id == CommentUser.comment_id).filter(
-        CommentUser.user == None).order_by(desc(Comment.date)) # "== None" n'est pas une erreur, c'est sqlalchemy qui le veut comme ça
+        CommentUser.user == None).order_by(
+        desc(Comment.date)) # "== None" n'est pas une erreur, c'est sqlalchemy qui le veut comme ça
 
     return render_template("notifications.html", comments=comments)
 

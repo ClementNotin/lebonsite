@@ -100,7 +100,7 @@
         <p><em>{{ comment.user.username }}</em> le {{ comment.date }}</p>
         <blockquote>{{ comment.content }}</blockquote>
     {% endfor %}
-    <form action="{{ url_for("comments_add") }}" method="post">
+    <form action="{{ url_for("comments_add") }}" method="post" id="commentForm">
         {{ form.hidden_tag() }}
         <p>
             Type your comment:<br>
