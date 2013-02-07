@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Notifications{% endblock %}
+
+
+{% block content %}
+    <h1>Nouveaux commentaires</h1>
+
+    {% for comment in comments %}
+        <div style="clear:both; border-bottom: 2px dotted;">
+            <div style="float:left; margin-right: 10px;">
+                <p>
+                    <em>{{ comment.user.username }}</em>
+                    <br/>
+                    {{ comment.date }}
+                </p>
+            </div>
+            <div style="float:left"><a href="{{ url_for("appart", appart_id=comment.appartement.id) }}">
+                <p>{{ comment.appartement.titre }}</a>
+                <br/>
+                {{ comment.content }}
+                </p>
+            </div>
+        </div>
+
+    {% endfor %}
+{% endblock %}

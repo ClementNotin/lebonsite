@@ -42,7 +42,7 @@ class Appartement(db.Model):
         self.auteur = unicode(auteur)
 
     def __repr__(self):
-        return u"<Appartement %r>" % self.titre
+        return u"<Appartement %d %r>" % (self.id,self.titre)
 
 
 class Photo(db.Model):
@@ -68,6 +68,7 @@ class User(db.Model):
     pwdhash = db.Column(db.String(40), unique=True)
     comments = db.relationship("Comment", order_by="Comment.id", backref="user")
     views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="user")
+    views_comments= db.relationship("CommentUser", backref="user")
 
     def __init__(self, username, pwdhash):
         self.username = username
@@ -104,10 +105,17 @@ class Comment(db.Model):
     content = db.Column(db.String(5000))
     appartement_id = db.Column(db.Integer, db.ForeignKey("appartements.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    views = db.relationship("CommentUser", backref="comment")
 
     def __init__(self, content, date=datetime.now()):
         self.content = content
         self.date = date
+
+    def seen_by(self,user):
+        #may already be seen! si on insert quand même on aura un primary key duplication error
+        if not CommentUser.query.get((self.id,user.id)):
+            db.session.add(CommentUser(self, user))
+            db.session.commit()
 
     def __repr__(self):
         return '<Comment %r>' % self.content
@@ -127,3 +135,17 @@ class AppartementUser(db.Model):
 
     def __repr__(self):
         return '<AppartementUser %r,%r,%r,%r>' % (self.user, self.appartement, self.date_seen, self.note)
+
+
+class CommentUser(db.Model):
+    __tablename__ = 'comments_users'
+
+    comment_id = db.Column(db.Integer, db.ForeignKey("comments.id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+
+    def __init__(self, comment, user):
+        self.comment = comment
+        self.user = user
+
+    def __repr__(self):
+        return '<CommentUser %r,%r>' % (self.comment, self.user)

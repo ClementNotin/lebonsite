@@ -9,8 +9,9 @@
 </head>
 <body>
 {% if g.user is defined and g.user.is_authenticated() %}
-    <div id="menu">Hello {{ g.user.username }} <a href="{{ url_for("logout") }}">[logout]</a>. <a
-            href="{{ url_for("apparts") }}">Voir les appart</a></div>
+    <div id="menu">Hello {{ g.user.username }} <a href="{{ url_for("logout") }}">[logout]</a> | <a
+            href="{{ url_for("apparts") }}">Voir les appart</a> | <a
+            href="{{ url_for("notifications") }}">Notifications</a></div>
 {% endif %}
 <div id="content">{% block content %}{% endblock %}</div>
 

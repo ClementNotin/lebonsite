@@ -17,7 +17,8 @@ def index():
 
 @app.route("/api/apparts/")
 def api_apparts():
-    datatable = DataTablesServer(request, ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date"], Appartement)
+    datatable = DataTablesServer(request,
+        ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date"], Appartement)
     results = datatable.output_result()
     return json.dumps(results)
 
@@ -55,6 +56,10 @@ def appart(appart_id=None):
             db.session.add(last_visit)
             db.session.commit()
 
+        # MAJ le fait que l'utilisateur a vu les commentaires
+        for comment in appart.comments:
+            comment.seen_by(g.user)
+
         return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart, form=form)
     else:
         return apparts()
@@ -72,6 +77,14 @@ def comments_add():
             db.session.add(comment)
             db.session.commit()
     return redirect(request.referrer)
+
+
+@app.route("/notifications")
+def notifications():
+    comments = Comment.query.outerjoin(CommentUser, Comment.id == CommentUser.comment_id).filter(
+        CommentUser.user == None).order_by(desc(Comment.date)) # "== None" n'est pas une erreur, c'est sqlalchemy qui le veut comme ça
+
+    return render_template("notifications.html", comments=comments)
 
 
 @app.route('/login', methods=['GET', 'POST'])
