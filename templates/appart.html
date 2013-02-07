@@ -17,7 +17,36 @@
                     }
                 }
             });
+
+            $(document).bind("mouseup", mouseUpHandler);
         });
+
+        /*useful method to get selected text*/
+        var getSelected = function () {
+            var t = '';
+            if (window.getSelection) {
+                t = window.getSelection();
+            } else if (document.getSelection) {
+                t = document.getSelection();
+            } else if (document.selection) {
+                t = document.selection.createRange().text;
+            }
+            return t.toString();
+        }
+
+        var mouseUpHandler = function () {
+            var selectedText = getSelected() + " " + {{ appart.cp }};
+            var linkAgro=$("#linkAgro")
+            var linkIntrin=$("#linkIntrin")
+
+            linkAgro.attr("href", "http://www.ratp.fr/itineraires/fr/ratp/resultat-detaille/start/" + selectedText +
+                    "/end/Rue+Claude+Bernard%2C+75005%2C+Paris/is_date_start/1/date/2013-04-02/time/08%3A00%3A00/route_type/plus_rapide");
+            linkIntrin.attr("href", "http://www.ratp.fr/itineraires/fr/ratp/resultat-detaille/start/" + selectedText +
+                    "/end/Avenue+Georges+Clemenceau%2C+92000%2C+Nanterre/is_date_start/1/date/2013-04-02/time/08%3A00%3A00/route_type/plus_rapide");
+
+            linkAgro.find("img").attr("src", "{{ url_for("static",filename="images/agroparistech.jpg") }}");
+            linkIntrin.find("img").attr("src", "{{ url_for("static",filename="images/intrin.jpg") }}");
+        }
     </script>
 {% endblock %}
 
@@ -59,6 +88,9 @@
                     <td>{{ appart.date }}</td>
                 </tr>
             </table>
+            <br/>
+            <a href="#" id="linkAgro"><img src="{{ url_for("static",filename="images/agroparistech_disabled.jpg") }}"/></a>
+            <a href="#" id="linkIntrin"><img src="{{ url_for("static",filename="images/intrin_disabled.jpg") }}"/></a>
             {% if arrondissement %}
                 <img src="{{ url_for("static",filename="images/arrdt_%s.gif" % arrondissement) }}"
                      style="max-width: 50%"/>
