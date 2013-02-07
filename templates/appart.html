@@ -136,7 +136,7 @@
     <hr/>
     {% for comment in appart.comments %}
         <p><em>{{ comment.user.username }}</em> le {{ comment.date }}</p>
-        <blockquote>{{ comment.content }}</blockquote>
+        <blockquote>{{ comment.content|nl2br }}</blockquote>
     {% endfor %}
     <form action="{{ url_for("comments_add") }}" method="post" id="commentForm">
         {{ form.hidden_tag() }}
