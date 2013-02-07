@@ -171,6 +171,13 @@ class DataTablesServer:
                         col = ""
                 elif col_name == "titre":
                     col = u'<a href="%s">%s</a>' % (url_for("appart", appart_id=row.id), col)
+                elif col_name == "meuble":
+                    if row.meuble is None:
+                        col="N/A"
+                    elif row.meuble:
+                        col="Oui"
+                    else:
+                        col="Non"
                 else:
                     col = unicode(col).replace('"', '\\"')
 

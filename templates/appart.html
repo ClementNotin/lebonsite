@@ -79,7 +79,9 @@
                 </tr>
                 <tr>
                     <td style="padding-right:10px;">Meublé</td>
-                    {% if appart.meuble %}
+                    {% if appart.meuble == None %}
+                        <td>N/A</td>
+                    {% elif appart.meuble %}
                         <td>Oui</td>
                     {% else %}
                         <td>Non</td>
