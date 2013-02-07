@@ -14,7 +14,7 @@
                     {{ comment.date }}
                 </p>
             </div>
-            <div style="float:left"><a href="{{ url_for("appart", appart_id=comment.appartement.id) }}">
+            <div style="float:left"><a href="{{ url_for("appart", appart_id=comment.appartement.id)+"#commentForm" }}">
                 <p>{{ comment.appartement.titre }}</a>
                 <br/>
                 {{ comment.content }}
