@@ -35,9 +35,15 @@
         }
 
         var mouseUpHandler = function () {
-            var selectedText = getSelected() + " " + {{ appart.cp }};
-            var linkAgro=$("#linkAgro")
-            var linkIntrin=$("#linkIntrin")
+            var selectedText = getSelected();
+            //clic dans le vide
+            if (selectedText == "") {
+                return;
+            }
+            selectedText += " " + {{ appart.cp }};
+
+            var linkAgro = $("#linkAgro")
+            var linkIntrin = $("#linkIntrin")
 
             linkAgro.attr("href", "http://www.ratp.fr/itineraires/fr/ratp/resultat-detaille/start/" + selectedText +
                     "/end/Rue+Claude+Bernard%2C+75005%2C+Paris/is_date_start/1/date/2013-04-02/time/08%3A00%3A00/route_type/plus_rapide");
