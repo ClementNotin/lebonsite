@@ -90,10 +90,8 @@ def comments_add():
 
 @app.route("/notifications")
 def notifications():
-    comments = Comment.query.outerjoin(CommentUser, Comment.id == CommentUser.comment_id).filter(
-        CommentUser.user == None).order_by(
-        desc(Comment.date)) # "== None" n'est pas une erreur, c'est sqlalchemy qui le veut comme ça
-
+    comments = Comment.query.filter(
+        ~Comment.id.in_(db.session.query(CommentUser.comment_id).filter_by(user=g.user))).order_by(desc(Comment.date))
     return render_template("notifications.html", comments=comments)
 
 
@@ -211,8 +209,8 @@ class DataTablesServer:
 
         #show only news ?
         if self.only_news:
-            query = query.outerjoin(AppartementUser, Appartement.id == AppartementUser.appartement_id).filter(
-                AppartementUser.user == None) # "== None" n'est pas une erreur, c'est sqlalchemy qui le veut comme ça
+            query = query.filter(
+                ~Appartement.id.in_(db.session.query(AppartementUser.appartement_id).filter_by(user=g.user)))
 
         return query
 
