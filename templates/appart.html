@@ -7,13 +7,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.score').raty({
-                path:"{{ url_for("static", filename="images") }}",
-                score:function () {
+                path: "{{ url_for("static", filename="images") }}",
+                score: function () {
                     return $(this).attr('data-rating');
                 },
-                click:function (score, evt) {
+                click: function (score, evt) {
                     if ($(this).attr("data-editable") == "true") {
-                        $.post("{{ url_for("api_rate", appart_id=appart.id) }}", {"note":score});
+                        $.post("{{ url_for("api_rate", appart_id=appart.id) }}", {"note": score});
                     }
                 }
             });

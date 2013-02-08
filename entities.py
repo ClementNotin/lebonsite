@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from lebonsite import db, app
 from datetime import datetime
 from hashlib import sha1
 import time
+
+from lebonsite import db, app
+
 
 class Appartement(db.Model):
     __tablename__ = 'appartements'
@@ -43,14 +45,14 @@ class Appartement(db.Model):
 
     def seen_by(self, user):
         #may already be seen! si on insert quand même on aura un primary key duplication error
-        if not AppartementUser.query.get((self.id,user.id)):
+        if not AppartementUser.query.get((self.id, user.id)):
             last_visit = AppartementUser(user, self)
             last_visit.date_seen = datetime.now()
             db.session.add(last_visit)
             db.session.commit()
 
     def __repr__(self):
-        return u"<Appartement %d %r>" % (self.id,self.titre)
+        return u"<Appartement %d %r>" % (self.id, self.titre)
 
 
 class Photo(db.Model):
@@ -76,7 +78,7 @@ class User(db.Model):
     pwdhash = db.Column(db.String(40), unique=True)
     comments = db.relationship("Comment", order_by="Comment.id", backref="user")
     views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="user")
-    views_comments= db.relationship("CommentUser", backref="user")
+    views_comments = db.relationship("CommentUser", backref="user")
 
     def __init__(self, username, pwdhash):
         self.username = username
@@ -119,9 +121,9 @@ class Comment(db.Model):
         self.content = content
         self.date = date
 
-    def seen_by(self,user):
+    def seen_by(self, user):
         #may already be seen! si on insert quand même on aura un primary key duplication error
-        if not CommentUser.query.get((self.id,user.id)):
+        if not CommentUser.query.get((self.id, user.id)):
             db.session.add(CommentUser(self, user))
             db.session.commit()
 

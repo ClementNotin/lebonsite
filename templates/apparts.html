@@ -13,16 +13,16 @@
             var API_SOURCE = "{{ url_for("api_apparts") }}"
 
             var datatable = $('#tblApparts').dataTable({
-                "bProcessing":true,
-                "bServerSide":true,
-                "sPaginationType":"full_numbers",
-                "bjQueryUI":true,
-                "sAjaxSource":API_SOURCE + "?only_news=" + $("#only_news")[0].checked,
-                "aaSorting":[
+                "bProcessing": true,
+                "bServerSide": true,
+                "sPaginationType": "full_numbers",
+                "bjQueryUI": true,
+                "sAjaxSource": API_SOURCE + "?only_news=" + $("#only_news")[0].checked,
+                "aaSorting": [
                     [8, 'desc']
                 ],
-                "sDom":'ipfrtpl',
-                "bStateSave":false
+                "sDom": 'ipfrtpl',
+                "bStateSave": false
             });
 
             $("#only_news").change(function () {

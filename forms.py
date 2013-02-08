@@ -3,6 +3,7 @@
 from flask.ext.wtf import Form, StringField, BooleanField, PasswordField, TextAreaField, HiddenField
 from flask.ext.wtf import Required
 
+
 class LoginForm(Form):
     login = StringField('login', validators=[Required()])
     password = PasswordField('password', validators=[Required()])

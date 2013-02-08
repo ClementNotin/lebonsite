@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from flask import  render_template, request, url_for, g, redirect, session
+import json
+
+from flask import render_template, request, url_for, g, redirect, session
+
 from sqlalchemy import asc, desc, func, or_
 from sqlalchemy.orm.exc import NoResultFound
+from flask.ext.login import login_user, logout_user
+
 from forms import *
-import json
+
 from lebonsite import app, db
 import config
 from entities import *
-from flask.ext.login import login_user, logout_user
+
 
 @app.route('/')
 def index():
@@ -18,7 +23,8 @@ def index():
 @app.route("/api/apparts/")
 def api_apparts():
     datatable = DataTablesServer(request,
-        ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date"], Appartement)
+                                 ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date"],
+                                 Appartement)
     results = datatable.output_result()
     return json.dumps(results)
 
@@ -26,7 +32,7 @@ def api_apparts():
 @app.route("/api/rate/<int:appart_id>", methods=["POST"])
 def api_rate(appart_id=None):
     if appart_id and "note" in request.values:
-        visit = AppartementUser.query.get_or_404((appart_id,g.user.id))
+        visit = AppartementUser.query.get_or_404((appart_id, g.user.id))
         visit.note = int(request.values["note"])
         db.session.commit()
 
@@ -62,7 +68,7 @@ def appart(appart_id=None):
             ardt = cp_str[-2:]
 
         return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart,
-            arrondissement=ardt, form=form)
+                               arrondissement=ardt, form=form)
     else:
         return apparts()
 
@@ -159,8 +165,8 @@ class DataTablesServer:
 
                 if col_name == "photos":
                     if len(col) > 0:
-                        col = u'<a href="%s">'\
-                              u'<img src="%s/%s"/ style="max-height: 10em; width:auto;">'\
+                        col = u'<a href="%s">' \
+                              u'<img src="%s/%s"/ style="max-height: 10em; width:auto;">' \
                               u'</a>' % (url_for("appart", appart_id=row.id), config.BASE_PHOTOS_URL, col[0].file)
                     else:
                         col = ""
@@ -168,11 +174,11 @@ class DataTablesServer:
                     col = u'<a href="%s">%s</a>' % (url_for("appart", appart_id=row.id), col)
                 elif col_name == "meuble":
                     if row.meuble is None:
-                        col="N/A"
+                        col = "N/A"
                     elif row.meuble:
-                        col="Oui"
+                        col = "Oui"
                     else:
-                        col="Non"
+                        col = "Non"
                 else:
                     col = unicode(col).replace('"', '\\"')
 
