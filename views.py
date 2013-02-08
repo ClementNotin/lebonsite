@@ -23,7 +23,7 @@ def api_apparts():
     return json.dumps(results)
 
 
-@app.route("/api/rate/<appart_id>", methods=["POST"])
+@app.route("/api/rate/<int:appart_id>", methods=["POST"])
 def api_rate(appart_id=None):
     if appart_id and "note" in request.values:
         visit = AppartementUser.query.get_or_404((appart_id,g.user.id))
@@ -38,7 +38,7 @@ def apparts():
     return render_template('apparts.html')
 
 
-@app.route("/appart/<appart_id>")
+@app.route("/appart/<int:appart_id>")
 def appart(appart_id=None):
     if appart_id:
         # get the appart
