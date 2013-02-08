@@ -117,9 +117,9 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     views = db.relationship("CommentUser", backref="comment")
 
-    def __init__(self, content, date=datetime.now()):
+    def __init__(self, content):
         self.content = content
-        self.date = date
+        self.date = datetime.now()
 
     def seen_by(self, user):
         #may already be seen! si on insert quand même on aura un primary key duplication error
