@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.append("..")
 from lebonsite import  db
 from entities import *
 from datetime import datetime
