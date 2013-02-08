@@ -32,7 +32,7 @@ def before_request():
 def check_valid_login():
     if g.user is None or not g.user.is_authenticated():
         if request.endpoint  and 'static' not in request.endpoint and request.endpoint != "login":
-            return redirect(url_for('login', next=request.path))
+            return redirect(url_for('login', next=request.script_root + request.path))
 
 # This is a nl2br (newline to <BR>) filter. Inspired from http://flask.pocoo.org/snippets/28/
 _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
