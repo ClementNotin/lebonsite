@@ -26,7 +26,7 @@ def api_apparts():
 @app.route("/api/rate/<appart_id>", methods=["POST"])
 def api_rate(appart_id=None):
     if appart_id and "note" in request.values:
-        visit = AppartementUser.query.filter_by(user=g.user, appartement_id=appart_id).first()
+        visit = AppartementUser.query.get_or_404((appart_id,g.user.id))
         visit.note = int(request.values["note"])
         db.session.commit()
 
@@ -41,12 +41,12 @@ def apparts():
 @app.route("/appart/<appart_id>")
 def appart(appart_id=None):
     if appart_id:
+        # get the appart
+        appart = Appartement.query.get_or_404(appart_id)
+
         # add comment form
         form = AddCommentForm()
         form.appart_id.data = appart_id
-
-        # get the appart
-        appart = db.session.query(Appartement).filter_by(id=appart_id).first()
 
         # has the user already seen this appart? if not: add tracking
         appart.seen_by(g.user)
@@ -71,7 +71,7 @@ def appart(appart_id=None):
 def comments_add():
     form = AddCommentForm()
     if form.validate_on_submit():
-        appart = db.session.query(Appartement).filter_by(id=form.appart_id.data).first()
+        appart = Appartement.query.get_or_404(form.appart_id.data)
         if appart:
             comment = Comment(form.content.data)
             comment.user = g.user
