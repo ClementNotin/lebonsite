@@ -37,14 +37,16 @@ def check_valid_login():
         if request.endpoint and 'static' not in request.endpoint and request.endpoint != "login":
             return redirect(url_for('login', next=request.script_root + request.path))
 
-# This is a nl2br (newline to <BR>) filter. Inspired from http://flask.pocoo.org/snippets/28/
+
 _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
 
 
 @app.template_filter()
 @evalcontextfilter
+# This is a nl2br (newline to <BR>) filter. Inspired from http://flask.pocoo.org/snippets/28/
 def nl2br(eval_ctx, value):
-    result = re.sub(_paragraph_re, "<br/>", value)
+    value = Markup.escape(value)
+    result = re.sub(_paragraph_re, Markup("<br/>"), value)
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
