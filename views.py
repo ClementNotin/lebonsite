@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-
+import re
 from flask import render_template, request, url_for, g, redirect, session
 
 from sqlalchemy import asc, desc, func, or_
@@ -13,6 +13,8 @@ from forms import *
 from lebonsite import app, db
 import config
 from entities import *
+
+user_re = re.compile("user(\d)")
 
 
 @app.route('/')
@@ -87,6 +89,23 @@ def comments_add():
 
     #fait scroller en bas de page pour voir si ya pas eu des nouveaux commentaires pendant l'écriture de celui-ci
     return redirect(request.referrer + "#commentForm")
+
+
+@app.route("/comments")
+def comments():
+    users = User.query.all()
+
+    shown = []
+    for arg in request.args:
+        id = re.search(user_re, arg).group(1)
+        shown.append(int(id))
+    empty_shown = (len(shown) == 0)
+
+    if empty_shown:
+        comments = Comment.query.order_by(desc(Comment.date))
+    else:
+        comments = Comment.query.filter(Comment.user_id.in_(shown)).order_by(desc(Comment.date))
+    return render_template("comments.html", shown=shown, users=users, comments=comments,empty_shown=empty_shown)
 
 
 @app.route("/notifications")
