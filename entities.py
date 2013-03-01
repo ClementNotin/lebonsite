@@ -24,6 +24,7 @@ class Appartement(db.Model):
     views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="appartement")
     date = db.Column(db.DateTime)
     auteur = db.Column(db.String(100))
+    source = db.Enum("leboncoin", "foncia")
 
     def __init__(self, id, titre, loyer, ville, cp, pieces, meuble, surface, description, photos, date, auteur):
         self.id = id
