@@ -2,7 +2,6 @@
 
 from datetime import datetime
 from hashlib import sha1
-import time
 
 from lebonsite import db, app
 
@@ -24,9 +23,9 @@ class Appartement(db.Model):
     views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="appartement")
     date = db.Column(db.DateTime)
     auteur = db.Column(db.String(100))
-    source = db.Enum("leboncoin", "foncia")
+    source = db.Column(db.Enum("leboncoin", "foncia"))
 
-    def __init__(self, id, titre, loyer, ville, cp, pieces, meuble, surface, description, photos, date, auteur):
+    def __init__(self, id, titre, loyer, ville, cp, pieces, meuble, surface, description, photos, date, auteur, source):
         self.id = id
         self.titre = unicode(titre)
         self.loyer = loyer
@@ -36,13 +35,12 @@ class Appartement(db.Model):
         self.meuble = meuble
         self.surface = surface
         self.description = unicode(description)
+        self.date = date
+        self.auteur = unicode(auteur)
+        self.source = source
 
         for photo in photos:
             self.photos.append(Photo(photo))
-
-        self.date = datetime.fromtimestamp(
-            time.mktime(time.strptime("2013 " + date.encode("utf-8"), u"%Y le %d %B à %H:%M".encode("utf-8"))))
-        self.auteur = unicode(auteur)
 
     def seen_by(self, user):
         #may already be seen! si on insert quand même on aura un primary key duplication error

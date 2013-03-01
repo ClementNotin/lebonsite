@@ -114,8 +114,13 @@
         <img src="{{ BASE_PHOTOS_URL }}{{ photo.file }}"/>
     {% endfor %}
     <br/>
+    {% if appart.source == "leboncoin" %}
     <a href="http://www.leboncoin.fr/locations/{{ appart.id }}.htm"><img
             src="{{ url_for("static", filename="images/leboncoin.png") }}"/></a>
+    {% elif appart.source == "foncia" %}
+        <a href="http://fr.foncia.com/annonces-immobilieres/location/detail.php?bien_id={{ appart.id }}&bd_id=FON"><img
+                src="{{ url_for("static", filename="images/foncia.png") }}"/></a>
+    {% endif %}
     <br/>
     <hr/>
     <table>
