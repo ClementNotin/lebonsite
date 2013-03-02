@@ -25,7 +25,8 @@ def index():
 @app.route("/api/apparts/")
 def api_apparts():
     datatable = DataTablesServer(request,
-                                 ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date"],
+                                 ["titre", "photos", "loyer", "ville", "cp", "pieces", "meuble", "surface", "date",
+                                  "source"],
                                  Appartement)
     results = datatable.output_result()
     return json.dumps(results)
@@ -105,7 +106,7 @@ def comments():
         comments = Comment.query.order_by(desc(Comment.date))
     else:
         comments = Comment.query.filter(Comment.user_id.in_(shown)).order_by(desc(Comment.date))
-    return render_template("comments.html", shown=shown, users=users, comments=comments,empty_shown=empty_shown)
+    return render_template("comments.html", shown=shown, users=users, comments=comments, empty_shown=empty_shown)
 
 
 @app.route("/notifications")
