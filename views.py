@@ -129,8 +129,7 @@ def login():
             print "bad login"
 
         if user and user.check_password(form.password.data):
-            session['remember_me'] = form.remember_me.data
-            login_user(user)
+            login_user(user, remember=form.remember_me.data)
             if "next" in request.values and request.values["next"] != "/":
                 return redirect(request.values["next"])
             else:
