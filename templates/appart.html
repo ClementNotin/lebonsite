@@ -44,14 +44,17 @@
 
             var linkAgro = $("#linkAgro")
             var linkIntrin = $("#linkIntrin")
+            var linkGMap = $("#linkGMap")
 
             linkAgro.attr("href", "http://www.ratp.fr/itineraires/fr/ratp/resultat-detaille/start/" + selectedText +
                     "/end/16+Rue+Claude+Bernard%2C+75005%2C+Paris/is_date_start/1/date/2013-04-02/time/08%3A00%3A00/route_type/plus_rapide");
             linkIntrin.attr("href", "http://www.ratp.fr/itineraires/fr/ratp/resultat-detaille/start/" + selectedText +
                     "/end/215+Avenue+Georges+Clemenceau%2C+92000%2C+Nanterre/is_date_start/1/date/2013-04-02/time/08%3A00%3A00/route_type/plus_rapide");
+            linkGMap.attr("href", "http://maps.google.fr/maps?q=" + selectedText)
 
             linkAgro.find("img").attr("src", "{{ url_for("static",filename="images/agroparistech.jpg") }}");
             linkIntrin.find("img").attr("src", "{{ url_for("static",filename="images/intrin.jpg") }}");
+            linkGMap.find("img").attr("src", "{{ url_for("static",filename="images/gmaps.png") }}");
         }
     </script>
 {% endblock %}
@@ -99,6 +102,7 @@
             <br/>
             <a href="#" id="linkAgro"><img src="{{ url_for("static",filename="images/agroparistech_disabled.jpg") }}"/></a>
             <a href="#" id="linkIntrin"><img src="{{ url_for("static",filename="images/intrin_disabled.jpg") }}"/></a>
+            <a href="#" id="linkGMap"><img src="{{ url_for("static",filename="images/gmaps_disabled.png") }}"/></a>
             {% if arrondissement %}
                 <img src="{{ url_for("static",filename="images/arrdt_%s.gif" % arrondissement) }}"
                      style="max-width: 50%"/>
@@ -115,8 +119,8 @@
     {% endfor %}
     <br/>
     {% if appart.source == "leboncoin" %}
-    <a href="http://www.leboncoin.fr/locations/{{ appart.id }}.htm"><img
-            src="{{ url_for("static", filename="images/leboncoin.png") }}"/></a>
+        <a href="http://www.leboncoin.fr/locations/{{ appart.id }}.htm"><img
+                src="{{ url_for("static", filename="images/leboncoin.png") }}"/></a>
     {% elif appart.source == "foncia" %}
         <a href="http://fr.foncia.com/annonces-immobilieres/location/detail.php?bien_id={{ appart.id }}&bd_id=FON"><img
                 src="{{ url_for("static", filename="images/foncia.png") }}"/></a>
