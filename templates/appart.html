@@ -152,10 +152,10 @@
     <form action="{{ url_for("comments_add") }}" method="post" id="commentForm">
         {{ form.hidden_tag() }}
         <p>
-            Type your comment:<br>
+            Votre commentaire :<br>
             {{ form.content(maxlength=5000, rows=10, cols=100) }}<br>
         </p>
 
-        <p><input type="submit" value="Submit"></p>
+        <p><input type="submit" value="Envoyer"></p>
     </form>
 {% endblock %}

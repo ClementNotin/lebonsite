@@ -4,21 +4,21 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-    <h1>Sign In</h1>
+    <h1>Se connecter</h1>
     <form action="" method="post" name="login">
         {{ form.hidden_tag() }}
         <p>
-            Please enter your login:<br>
+            Nom d'utilisateur :<br>
             {{ form.login(size=80) }}<br>
         </p>
 
         <p>
-            Please enter your password:<br>
+            Mot de passe :<br>
             {{ form.password(size=80) }}<br>
         </p>
 
-        <p>{{ form.remember_me }} Remember Me</p>
+        <p>{{ form.remember_me }} Rester connecté</p>
 
-        <p><input type="submit" value="Sign In"></p>
+        <p><input type="submit" value="Se connecter"></p>
     </form>
 {% endblock %}
