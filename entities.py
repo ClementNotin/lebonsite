@@ -121,10 +121,14 @@ class Comment(db.Model):
         self.date = datetime.now()
 
     def seen_by(self, user):
+        #return True if it was already seen, False otherwise
+
         #may already be seen! si on insert quand même on aura un primary key duplication error
         if not CommentUser.query.get((self.id, user.id)):
             db.session.add(CommentUser(self, user))
             db.session.commit()
+            return False
+        return True
 
     def __repr__(self):
         return '<Comment %r>' % self.content

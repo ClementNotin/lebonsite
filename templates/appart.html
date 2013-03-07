@@ -153,6 +153,11 @@
     </table>
     <br/>
     <hr/>
+    {% if new_comments %}
+        <div id="comments_notif">
+            <a href="#commentForm">Nouveaux commentaires !</a>
+        </div>
+    {% endif %}
     {% for comment in appart.comments %}
         <p><em>{{ comment.user.username }}</em> le {{ comment.date }}</p>
         <blockquote>{{ comment.content|nl2br }}</blockquote>

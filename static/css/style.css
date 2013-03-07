@@ -10,3 +10,11 @@ footer {
     position: fixed;
     bottom: 5px;
 }
+
+#comments_notif {
+    position: fixed;
+    bottom: 0;
+    right:0;
+    background-color: palegoldenrod;
+    padding:.75em;
+}

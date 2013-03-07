@@ -60,9 +60,11 @@ def appart(appart_id=None):
         # has the user already seen this appart? if not: add tracking
         appart.seen_by(g.user)
 
-        # MAJ le fait que l'utilisateur a vu les commentaires
+        # regarde si ya des nouveaux commentaires, et les marquer comme vus
+        new_comments=False
         for comment in appart.comments:
-            comment.seen_by(g.user)
+            if not comment.seen_by(g.user):
+                new_comments=True
 
         #arrondissement depuis code postal
         ardt = None
@@ -71,7 +73,7 @@ def appart(appart_id=None):
             ardt = cp_str[-2:]
 
         return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart,
-                               arrondissement=ardt, form=form)
+                               arrondissement=ardt, form=form, new_comments=new_comments)
     else:
         return apparts()
 
@@ -85,6 +87,7 @@ def comments_add():
             comment = Comment(form.content.data)
             comment.user = g.user
             comment.appartement = appart
+            comment.seen_by(g.user)
             db.session.add(comment)
             db.session.commit()
 
