@@ -78,7 +78,11 @@
                 </tr>
                 <tr>
                     <td>Pièces</td>
-                    <td>{{ appart.pieces }}</td>
+                    {% if appart.pieces == None %}
+                        <td>N/A</td>
+                    {% else %}
+                        <td>{{ appart.pieces }}</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td style="padding-right:10px;">Meublé</td>
@@ -92,7 +96,11 @@
                 </tr>
                 <tr style="height:1em;vertical-align:bottom;">
                     <td>Surface</td>
-                    <td>{{ appart.surface }} m<sup>2</sup></td>
+                    {% if appart.surface == None %}
+                        <td>N/A</td>
+                    {% else %}
+                        <td>{{ appart.surface }} m<sup>2</sup></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td>Date</td>
