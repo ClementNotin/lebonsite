@@ -1,12 +1,12 @@
 body {
-    font-family:'Century Gothic',futura,'URW Gothic L',Verdana,sans-serif;
+    font-family: 'Century Gothic', futura, 'URW Gothic L', Verdana, sans-serif;
 }
 
 textarea {
-    font-family:'Century Gothic',futura,'URW Gothic L',Verdana,sans-serif;
+    font-family: 'Century Gothic', futura, 'URW Gothic L', Verdana, sans-serif;
 }
 
-footer{
-    position:fixed;
-    bottom:5px;
+footer {
+    position: fixed;
+    bottom: 5px;
 }
