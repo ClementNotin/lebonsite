@@ -140,14 +140,14 @@ class AppartementUser(db.Model):
     appartement_id = db.Column(db.Integer, db.ForeignKey("appartements.id"), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     date_seen = db.Column(db.DateTime)
-    note = db.Column(db.SmallInteger, default=0)
+    like = db.Column(db.SmallInteger, default=0)
 
     def __init__(self, user, appartement):
         self.user = user
         self.appartement = appartement
 
     def __repr__(self):
-        return '<AppartementUser %r,%r,%r,%r>' % (self.user, self.appartement, self.date_seen, self.note)
+        return '<AppartementUser %r,%r,%r,%r>' % (self.user, self.appartement, self.date_seen, self.like)
 
 
 class CommentUser(db.Model):

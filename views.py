@@ -2,7 +2,7 @@
 
 import json
 import re
-from flask import render_template, request, url_for, g, redirect, session
+from flask import render_template, request, url_for, g, redirect
 
 from sqlalchemy import asc, desc, func, or_
 from sqlalchemy.orm.exc import NoResultFound
@@ -34,9 +34,9 @@ def api_apparts():
 
 @app.route("/api/rate/<int:appart_id>", methods=["POST"])
 def api_rate(appart_id=None):
-    if appart_id and "note" in request.values:
+    if appart_id and "like" in request.values:
         visit = AppartementUser.query.get_or_404((appart_id, g.user.id))
-        visit.note = int(request.values["note"])
+        visit.like = int(request.values["like"])
         db.session.commit()
 
     return "ok"
@@ -61,10 +61,10 @@ def appart(appart_id=None):
         appart.seen_by(g.user)
 
         # regarde si ya des nouveaux commentaires, et les marquer comme vus
-        new_comments=False
+        new_comments = False
         for comment in appart.comments:
             if not comment.seen_by(g.user):
-                new_comments=True
+                new_comments = True
 
         #arrondissement depuis code postal
         ardt = None
@@ -162,6 +162,10 @@ class DataTablesServer:
         if "only_news" in self.request_values:
             self.only_news = self.request_values["only_news"].lower() == "true"
 
+        self.only_likes = False
+        if "only_likes" in self.request_values:
+            self.only_likes = self.request_values["only_likes"].lower() == "true"
+
         # results from the db
         self.result_data = None
 
@@ -241,6 +245,11 @@ class DataTablesServer:
         if self.only_news:
             query = query.filter(
                 ~Appartement.id.in_(db.session.query(AppartementUser.appartement_id).filter_by(user=g.user)))
+
+        #show only likes ?
+        if self.only_likes:
+            query = query.filter(
+                Appartement.id.in_(db.session.query(AppartementUser.appartement_id).filter_by(like=1)))
 
         return query
 

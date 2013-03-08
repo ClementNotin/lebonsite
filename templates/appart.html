@@ -7,13 +7,21 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.score').raty({
+                number: 1,
+                cancel: true,
                 path: "{{ url_for("static", filename="images") }}",
                 score: function () {
                     return $(this).attr('data-rating');
                 },
                 click: function (score, evt) {
                     if ($(this).attr("data-editable") == "true") {
-                        $.post("{{ url_for("api_rate", appart_id=appart.id) }}", {"note": score});
+                        if (score == null) {
+                            score = 0
+                        }
+                        $.post("{{ url_for("api_rate", appart_id=appart.id) }}", {"like": score});
+                        return true;
+                    } else {
+                        return false;
                     }
                 }
             });
@@ -139,14 +147,14 @@
         {% for view in appart.views %}
             {% if view.user == g.user %}
                 <tr>
-                    <td style="text-align:right">J'ai noté :</td>
-                    <td><span class="score" data-editable="true" data-rating="{{ view.note }}"></span></td>
+                    <td style="text-align:right">Coup de coeur :</td>
+                    <td><span class="score" data-editable="true" data-rating="{{ view.like }}"></span></td>
                 </tr>
 
-            {% elif view.note > 0 %}
+            {% elif view.like > 0 %}
                 <tr>
-                    <td style="text-align:right"><em>{{ view.user.username }}</em> a noté :</td>
-                    <td><span class="score" data-rating="{{ view.note }}"></span></td>
+                    <td style="text-align:right">Coup de coeur de <em>{{ view.user.username }}</em></td>
+                    <td><span class="score" data-rating="{{ view.like }}"></span></td>
                 </tr>
             {% endif %}
         {% endfor %}

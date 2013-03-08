@@ -138,11 +138,16 @@
 						self.opt.mouseover.call(self, self.score.val() || null);
 					}
 				}).click(function(evt) {
-					self.score.removeAttr('value');
-
+                    var validated = true;
 					if (self.opt.click) {
-			          self.opt.click.call(self, null, evt);
+                        if (!self.opt.click.call(self, null, evt))
+                        {
+                          validated = false;
+                        }
 			        }
+                    if (validated) {
+                        self.score.removeAttr('value');
+                    }
 				});
 			}
 

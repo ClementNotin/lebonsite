@@ -9,15 +9,20 @@
     <script type="text/javascript" src="{{ url_for("static", filename="js/jquery.dataTables.plugins.js") }}"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            var API_SOURCE = "{{ url_for("api_apparts") }}"
+        var API_SOURCE = "{{ url_for("api_apparts") }}";
+        var datatable;
 
-            var datatable = $('#tblApparts').dataTable({
+        var tableUrlGen = function () {
+            return API_SOURCE + "?only_news=" + $("#only_news")[0].checked + "&only_likes=" + $("#only_likes")[0].checked
+        };
+
+        $(document).ready(function () {
+            datatable = $('#tblApparts').dataTable({
                 "bProcessing": true,
                 "bServerSide": true,
                 "sPaginationType": "full_numbers",
                 "bjQueryUI": true,
-                "sAjaxSource": API_SOURCE + "?only_news=" + $("#only_news")[0].checked,
+                "sAjaxSource": tableUrlGen(),
                 "aaSorting": [
                     [8, 'desc']
                 ],
@@ -26,13 +31,20 @@
             });
 
             $("#only_news").change(function () {
-                datatable.fnReloadAjax(API_SOURCE + "?only_news=" + this.checked);
-            })
+                datatable.fnReloadAjax(tableUrlGen());
+            });
+            $("#only_likes").change(function () {
+                datatable.fnReloadAjax(tableUrlGen());
+            });
         });
     </script>
 {% endblock %}
 {% block content %}
-    <p><label for="only_news">Ne voir que les nouveautés</label><input type="checkbox" id="only_news"/></p>
+    <p>
+        <label for="only_news">Ne voir que les nouveautés</label><input type="checkbox" id="only_news"/>
+        <br/>
+        <label for="only_likes">Ne voir que les coups de coeur</label><input type="checkbox" id="only_likes"/>
+    </p>
     <table id="tblApparts">
         <thead>
         <tr>
