@@ -8,7 +8,9 @@
         $(document).ready(function () {
             $('.score').raty({
                 number: 1,
+                hints: ["Coup de coeur"],
                 cancel: true,
+                cancelHint: "Enlever ce coup de coeur",
                 path: "{{ url_for("static", filename="images") }}",
                 score: function () {
                     return $(this).attr('data-rating');
