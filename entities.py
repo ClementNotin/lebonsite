@@ -10,7 +10,7 @@ class Appartement(db.Model):
     __tablename__ = 'appartements'
 
     id = db.Column(db.Integer, primary_key=True)
-    titre = db.Column(db.String(100))
+    titre = db.Column(db.String(200))
     loyer = db.Column(db.Integer)
     ville = db.Column(db.String(50))
     cp = db.Column(db.Integer)
@@ -23,9 +23,11 @@ class Appartement(db.Model):
     views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="appartement")
     date = db.Column(db.DateTime)
     auteur = db.Column(db.String(100))
-    source = db.Column(db.Enum("leboncoin", "foncia"))
+    source = db.Column(db.Enum("leboncoin", "foncia", "seloger"))
+    url = db.Column(db.String(200))
 
-    def __init__(self, id, titre, loyer, ville, cp, pieces, meuble, surface, description, photos, date, auteur, source):
+    def __init__(self, id, titre, loyer, ville, cp, pieces, meuble, surface, description, photos, date, auteur, source,
+                 url):
         self.id = id
         self.titre = unicode(titre)
         self.loyer = loyer
@@ -38,6 +40,7 @@ class Appartement(db.Model):
         self.date = date
         self.auteur = unicode(auteur)
         self.source = source
+        self.url = url
 
         for photo in photos:
             self.photos.append(Photo(photo))
