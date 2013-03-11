@@ -13,7 +13,9 @@
         var datatable;
 
         var tableUrlGen = function () {
-            return API_SOURCE + "?only_news=" + $("#only_news")[0].checked + "&only_likes=" + $("#only_likes")[0].checked
+            return API_SOURCE + "?only_news=" + $("#only_news")[0].checked +
+                    "&only_likes=" + $("#only_likes")[0].checked +
+                    "&only_sent_emails=" + $("#only_sent_emails")[0].checked
         };
 
         $(document).ready(function () {
@@ -36,6 +38,9 @@
             $("#only_likes").change(function () {
                 datatable.fnReloadAjax(tableUrlGen());
             });
+            $("#only_sent_emails").change(function () {
+                datatable.fnReloadAjax(tableUrlGen());
+            });
         });
     </script>
 {% endblock %}
@@ -44,6 +49,8 @@
         <label for="only_news">Ne voir que les nouveautés</label><input type="checkbox" id="only_news"/>
         <br/>
         <label for="only_likes">Ne voir que les coups de coeur</label><input type="checkbox" id="only_likes"/>
+        <br/>
+        <label for="only_sent_emails">E-mails envoyés</label><input type="checkbox" id="only_sent_emails"/>
     </p>
     <table id="tblApparts">
         <thead>

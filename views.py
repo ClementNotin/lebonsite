@@ -183,6 +183,10 @@ class DataTablesServer:
         if "only_likes" in self.request_values:
             self.only_likes = self.request_values["only_likes"].lower() == "true"
 
+        self.only_sent_emails = False
+        if "only_sent_emails" in self.request_values:
+            self.only_sent_emails = self.request_values["only_sent_emails"].lower() == "true"
+
         # results from the db
         self.result_data = None
 
@@ -267,6 +271,10 @@ class DataTablesServer:
         if self.only_likes:
             query = query.filter(
                 Appartement.id.in_(db.session.query(AppartementUser.appartement_id).filter_by(like=1)))
+
+        #show only with sent emails ?
+        if self.only_sent_emails:
+            query = query.filter_by(sent_email=True)
 
         return query
 
