@@ -47,6 +47,19 @@ def apparts():
     return render_template('apparts.html')
 
 
+@app.route("/appart/<int:appart_id>", methods=["POST"])
+def appart_sent_email(appart_id=None):
+    if appart_id:
+        # get the appart
+        appartement = Appartement.query.get_or_404(appart_id)
+
+        sent_email_form = SentEmailForm()
+        appartement.sent_email = sent_email_form.sent_email.data
+        db.session.commit()
+
+        return appart(appart_id)
+
+
 @app.route("/appart/<int:appart_id>")
 def appart(appart_id=None):
     if appart_id:
@@ -56,6 +69,9 @@ def appart(appart_id=None):
         # add comment form
         form = AddCommentForm()
         form.appart_id.data = appart_id
+
+        sent_email_form = SentEmailForm()
+        sent_email_form.sent_email.data = appart.sent_email
 
         # has the user already seen this appart? if not: add tracking
         appart.seen_by(g.user)
@@ -73,7 +89,8 @@ def appart(appart_id=None):
             ardt = cp_str[-2:]
 
         return render_template('appart.html', BASE_PHOTOS_URL=config.BASE_PHOTOS_URL, appart=appart,
-                               arrondissement=ardt, form=form, new_comments=new_comments)
+                               arrondissement=ardt, form=form, sent_email_form=sent_email_form,
+                               new_comments=new_comments)
     else:
         return apparts()
 

@@ -13,3 +13,7 @@ class LoginForm(Form):
 class AddCommentForm(Form):
     appart_id = HiddenField("appart_id", validators=[Required()])
     content = TextAreaField('content', validators=[Required()])
+
+
+class SentEmailForm(Form):
+    sent_email = BooleanField('sent_email', default=False)

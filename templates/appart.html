@@ -160,6 +160,19 @@
                 </tr>
             {% endif %}
         {% endfor %}
+        <tr>
+            <td style="text-align:right">E-mail envoyé :</td>
+            <td>
+                <form action="" method="post">
+                    {{ sent_email_form.hidden_tag() }}
+                    {% if sent_email_form.sent_email.data %}
+                        <input type="checkbox" value="y" checked="checked" name="sent_email" id="sent_email" onchange="submit()">
+                    {% else %}
+                        <input type="checkbox" value="n" name="sent_email" id="sent_email" onchange="submit()">
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
     </table>
     <br/>
     <hr/>
