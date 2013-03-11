@@ -14,12 +14,14 @@
                     {{ comment.date }}
                 </p>
             </div>
-            <div style="float:left">
-                <a href="{{ url_for("appart", appart_id=comment.appartement.id)+"#commentForm" }}">
-                    <img src="{{ config.BASE_PHOTOS_URL }}/{{ comment.appartement.photos[0].file }}"
-                         style="width: 10em; margin-right: 2em;">
-                </a>
-            </div>
+            {% if comment.appartement.photos %}
+                <div style="float:left;">
+                    <a href="{{ url_for("appart", appart_id=comment.appartement.id)+"#commentForm" }}">
+                        <img src="{{ config.BASE_PHOTOS_URL }}/{{ comment.appartement.photos[0].file }}"
+                             style="width: 10em; margin-right: 2em;">
+                    </a>
+                </div>
+            {% endif %}
             <div style="float:left">
                 <p>
                     <a href="{{ url_for("appart", appart_id=comment.appartement.id)+"#commentForm" }}"> {{ comment.appartement.titre }}</a>
