@@ -14,8 +14,8 @@ footer {
 #comments_notif {
     position: fixed;
     bottom: 0;
-    left: 0;
+    left: 40%;
     background-color: palegoldenrod;
     padding: .75em;
-    opacity: 0.75;
+    opacity: 0.85;
 }
