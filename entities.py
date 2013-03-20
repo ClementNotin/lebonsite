@@ -23,7 +23,7 @@ class Appartement(db.Model):
     views = db.relationship("AppartementUser", order_by="AppartementUser.date_seen", backref="appartement")
     date = db.Column(db.DateTime)
     auteur = db.Column(db.String(100))
-    source = db.Column(db.Enum("leboncoin", "foncia", "seloger"))
+    source = db.Column(db.Enum("leboncoin", "foncia", "seloger", "pap"))
     url = db.Column(db.String(200))
     sent_email = db.Column(db.Boolean)
 
