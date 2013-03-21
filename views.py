@@ -207,7 +207,6 @@ class DataTablesServer:
         for row in self.result_data:
             aaData_row = []
             for col_name in self.columns:
-                #aaData_row.append(row[self.columns[i]].replace('"', '\\"'))
                 col = getattr(row, col_name, "Column not found")
 
                 if col_name == "photos":
@@ -227,6 +226,8 @@ class DataTablesServer:
                     else:
                         col = "Non"
                 else:
+                    if col is None:
+                        col = "N/A"
                     col = unicode(col).replace('"', '\\"')
 
                 aaData_row.append(col)
