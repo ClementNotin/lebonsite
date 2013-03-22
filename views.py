@@ -261,7 +261,8 @@ class DataTablesServer:
             search_string = u"%%%s%%" % self.request_values['sSearch']
 
             query = query.filter(
-                or_(Appartement.titre.like(search_string), Appartement.description.like(search_string)))
+                or_(Appartement.titre.like(search_string), Appartement.description.like(search_string), 
+                Appartement.auteur.like(search_string)))
 
         #show only news ?
         if self.only_news:
