@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Voir un appart{% endblock %}
+{% block title %}{{ appart.titre }}{% endblock %}
 {% block head %}
     {{ super() }}
     <script type="text/javascript" src="{{ url_for("static", filename="js/jquery.raty.js") }}"></script>
